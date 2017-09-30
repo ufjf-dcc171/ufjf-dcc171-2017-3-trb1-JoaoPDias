@@ -54,6 +54,11 @@ public class ItemPedido {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+    @Override
+    public String toString() {
+        return "Item: "+getProduto().toString() + " X " + getQuantidade() + " = " +getValorTotal();
+    }
     
     
         

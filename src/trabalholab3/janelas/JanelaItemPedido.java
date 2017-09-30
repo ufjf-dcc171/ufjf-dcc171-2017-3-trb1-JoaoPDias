@@ -85,14 +85,18 @@ public class JanelaItemPedido extends JFrame {
         adicionarItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
-                Produto prod = (Produto) combo.getSelectedItem();
-                Integer quantidade = Integer.parseInt(txtQuantidade.getText().replace(",", "."));
-                ItemPedido item = new ItemPedido(pedido, prod.clonar(), quantidade);
-                modelo.addRow(item);
-                combo.setSelectedIndex(0);
-                txtQuantidade.setText("");
-                janelaPedido.atualizaTabela();
+                try {
+                    ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
+                    Produto prod = (Produto) combo.getSelectedItem();
+                    Integer quantidade = Integer.parseInt(txtQuantidade.getText());
+                    ItemPedido item = new ItemPedido(pedido, prod.clonar(), quantidade);
+                    modelo.addRow(item);
+                    combo.setSelectedIndex(0);
+                    txtQuantidade.setText("");
+                    janelaPedido.atualizaTabela();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Quantidade Inválida", "Alerta", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         );
@@ -117,15 +121,19 @@ public class JanelaItemPedido extends JFrame {
                 if (tabela.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(null, "Selecione um Pedido", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
-                    Produto p = (Produto) combo.getSelectedItem();
-                    int linha = tabela.getSelectedRow();
-                    modelo.setValueAt(p, linha, 0);
-                    modelo.setValueAt(txtQuantidade.getText(), linha, 1);
-                    modelo.fireTableDataChanged();
-                    combo.setSelectedIndex(0);
-                    txtQuantidade.setText("");
-                    janelaPedido.atualizaTabela();
+                    try {
+                        ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
+                        Produto p = (Produto) combo.getSelectedItem();
+                        int linha = tabela.getSelectedRow();
+                        modelo.setValueAt(p, linha, 0);
+                        modelo.setValueAt(txtQuantidade.getText(), linha, 1);
+                        modelo.fireTableDataChanged();
+                        combo.setSelectedIndex(0);
+                        txtQuantidade.setText("");
+                        janelaPedido.atualizaTabela();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Quantidade Inválida", "Alerta", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -159,7 +167,14 @@ public class JanelaItemPedido extends JFrame {
         });
         removerItem.setEnabled(false);
         salvarItem.setEnabled(false);
-        adicionarItem.setEnabled(true);
+        if (pedido.isFechado() == false) {
+            adicionarItem.setEnabled(true);
+        } else {
+            adicionarItem.setEnabled(false);
+            txtQuantidade.setEnabled(false);
+            combo.setEnabled(false);
+        }
+        janelaPedido.atualizaTabela();
     }
 
 }

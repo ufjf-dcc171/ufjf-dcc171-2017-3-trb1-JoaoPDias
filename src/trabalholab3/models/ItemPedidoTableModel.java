@@ -27,7 +27,7 @@ public class ItemPedidoTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return itemPedidos.get(rowIndex).getProduto();
+                return itemPedidos.get(rowIndex).getProduto().getDescricao();
             case 1:
                 return Integer.toString(itemPedidos.get(rowIndex).getQuantidade());
             case 2:

@@ -49,7 +49,7 @@ public class JanelaMesas extends JFrame {
 
             }
         });
-
+        gerarPedidos();
     }
 
     public JanelaProdutos getJanelaProdutos() {
@@ -98,7 +98,7 @@ public class JanelaMesas extends JFrame {
     }
 
     public void gerarPedidos() {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             mesas.forEach((m) -> {
                 m.gerarPedido();
             });

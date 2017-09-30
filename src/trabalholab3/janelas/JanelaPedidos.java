@@ -7,18 +7,17 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import trabalholab3.modelos.ItemPedido;
 import trabalholab3.modelos.Mesa;
 import trabalholab3.modelos.Pedido;
 import trabalholab3.modelos.Produto;
@@ -28,13 +27,12 @@ public class JanelaPedidos extends JFrame {
 
     private JTable tabela;
     private JButton adicionarPedido = new JButton("Adicionar Pedido");
-    private JButton visualizarItem = new JButton("Visualizar Itens");
+    private JButton gerenciarItem = new JButton("Gerenciar Itens");
     private JButton fecharPedido = new JButton("Fechar Pedido");
     private JButton salvar = new JButton("Salvar");
     private List<Pedido> dados;
     private Mesa mesa;
     private List<Produto> produtos;
-    private JanelaItemPedido itemPedido;
 
     public JanelaPedidos(List<Produto> p, Mesa m, List<Pedido> data) throws HeadlessException {
         super("Gerenciador de Pedidos");
@@ -47,12 +45,15 @@ public class JanelaPedidos extends JFrame {
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         adicionarPedido.setBackground(new Color(034, 139, 034));
         adicionarPedido.setForeground(Color.WHITE);
-        visualizarItem.setBackground(new Color(000, 000, 205));
-        visualizarItem.setForeground(Color.WHITE);
+        gerenciarItem.setBackground(new Color(000, 000, 205));
+        gerenciarItem.setForeground(Color.WHITE);
+        fecharPedido.setBackground(Color.red);
+        fecharPedido.setForeground(Color.white);
         JPanel botoes = new JPanel();
-        botoes.setLayout(new GridLayout(1, 2));
+        botoes.setLayout(new GridLayout(1, 3));
         botoes.add(adicionarPedido);
-        botoes.add(visualizarItem);
+        botoes.add(gerenciarItem);
+        botoes.add(fecharPedido);
         add(botoes, BorderLayout.SOUTH);
         adicionarPedido.addActionListener(new ActionListener() {
             @Override
@@ -67,23 +68,45 @@ public class JanelaPedidos extends JFrame {
                 }
             }
         });
-        visualizarItem.addActionListener(new ActionListener() {
+        gerenciarItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (tabela.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(null, "Selecione um Pedido", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    if (itemPedido == null) {
-                        PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
-                        JanelaItemPedido item = new JanelaItemPedido(produtos, modelo.getRow(tabela.getSelectedRow()), getInstance());
-                        itemPedido = item;
-                        item.solicitaItemPedido();
-                    } else {
-                        itemPedido.solicitaItemPedido();
+                    PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
+                    JanelaItemPedido item = new JanelaItemPedido(produtos, modelo.getRow(tabela.getSelectedRow()), getInstance());
+                    if(dados.get(0).getItemPedido().size()<=0){
+                    gerarItensPedido();
                     }
+                    item.solicitaItemPedido();
+
                 }
             }
         });
+        fecharPedido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tabela.getSelectedRow() < 0) {
+                    JOptionPane.showMessageDialog(null, "Selecione um Pedido", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
+                    Pedido pedido = modelo.getRow(tabela.getSelectedRow());
+                    if (pedido.isFechado() == false) {
+                        pedido.setFechado(true);
+                        pedido.setHora_fechamento(LocalTime.now());
+                        JOptionPane.showMessageDialog(null, "Pedido Fechado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        JanelaFinalizacao janela = new JanelaFinalizacao(pedido);
+                        janela.solicitaFinalizacao();
+                        atualizaTabela();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Pedido já Fechado", "Alerta", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }
+            }
+        });
+
     }
 
     public void solicitaPedido() {
@@ -98,5 +121,15 @@ public class JanelaPedidos extends JFrame {
     public void atualizaTabela() {
         PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
         modelo.fireTableDataChanged();
+    }
+    
+    public void gerarItensPedido(){
+        for(int i=0;i<30;i++){
+            Random r = new Random();
+            Produto p = produtos.get(r.nextInt(10));
+            ItemPedido item = new ItemPedido(dados.get(0), p, r.nextInt(100));
+            dados.get(0).getItemPedido().add(item);
+        }
+        
     }
 }

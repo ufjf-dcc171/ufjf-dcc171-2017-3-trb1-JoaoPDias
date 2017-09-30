@@ -39,7 +39,7 @@ public class PedidoTableModel extends AbstractTableModel {
                 if (pedidos.get(rowIndex).getHora_fechamento() == null) {
                     return "Pedido Aberto";
                 } else {
-                    pedidos.get(rowIndex).getHora_fechamento().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+                    return pedidos.get(rowIndex).getHora_fechamento().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
                 }
             case 5:
                 if (pedidos.get(rowIndex).isFechado() == true) {

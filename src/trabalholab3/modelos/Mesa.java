@@ -11,8 +11,8 @@ public class Mesa {
 
     private List<Pedido> pedido;
 
-    private static int gencodigo = 0;
-    private int gencodigoPedido = 0;
+    private static int gencodigo = 1;
+    private int gencodigoPedido = 1;
 
     public int gerarCodigoPedido() {
         int cod = gencodigoPedido;

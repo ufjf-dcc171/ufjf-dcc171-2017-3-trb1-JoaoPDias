@@ -56,7 +56,7 @@ public class JanelaInicial extends JFrame {
     List<Produto> getSampleData() {
         List<Produto> ListProdutos = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            Produto p = new Produto("Produto" + i, (45.8 * i) / 3);
+            Produto p = new Produto("Produto" + i, (45.8 * i+1) / 3);
             ListProdutos.add(p);
         }
         return ListProdutos;

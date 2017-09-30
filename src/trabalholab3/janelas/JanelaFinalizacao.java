@@ -52,7 +52,6 @@ public class JanelaFinalizacao extends JFrame {
         produtos.setLayout(new GridLayout(pedido.getItemPedido().size(), 1));
         for (ItemPedido p : pedido.getItemPedido()) {
             JLabel lbl = new JLabel(p.toString());
-            lbl.setHorizontalAlignment(SwingConstants.CENTER);
             produtos.add(lbl);
         }
         resumo.add(new JScrollPane(produtos),BorderLayout.SOUTH);
