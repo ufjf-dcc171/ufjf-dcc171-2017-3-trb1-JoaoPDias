@@ -1,6 +1,7 @@
 package trabalholab3.janelas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -57,6 +58,12 @@ public class JanelaProdutos extends JFrame {
         formulario.add(campoID);
         formulario.add(campoDescricao);
         formulario.add(campoValor);
+        salvar.setBackground(new Color(000, 000, 205));
+        salvar.setForeground(Color.WHITE);
+        adicionar.setBackground(new Color(034, 139, 034));
+        adicionar.setForeground(Color.WHITE);
+        remover.setBackground(Color.red);
+        remover.setForeground(Color.WHITE);
         formulario.add(salvar);
         formulario.add(remover);
         formulario.add(adicionar);
@@ -73,7 +80,6 @@ public class JanelaProdutos extends JFrame {
                     remover.setEnabled(false);
                     salvar.setEnabled(false);
                 } else {
-                    JOptionPane.showMessageDialog(null, tabela.getSelectedRow());
                     adicionar.setEnabled(false);
                     remover.setEnabled(true);
                     salvar.setEnabled(true);
