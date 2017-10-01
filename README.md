@@ -27,4 +27,4 @@ A implementação dos TableModels foi com um grau de dificuldade maior, exigiu m
 
 Devem ser feitas melhorias a cerca dos dados, utilizando um banco de dados para facilitar o uso e também permitir a criação de novas funcionalidades.
 
-A interface necessita de melhorias quanto a implementação de atalhos, a sinalização de pedidos fechados na tabela de pedidos. O foco ao novo dado inserido na tabela, permitindo ao usuário a visualização do resultado de sua operação.
+A interface necessita de melhorias quanto a implementação de atalhos, a sinalização de pedidos fechados na tabela de pedidos e melhorias gerais que buscam adequar o sistema aos padrões usados em sistemas desktop. O foco ao novo dado inserido na tabela, permitindo ao usuário a visualização do resultado de sua operação.
