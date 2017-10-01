@@ -28,7 +28,7 @@ public class ItemPedido {
     public ItemPedido(Pedido pedido, Produto produto, int quantidade) {
         this.pedido = pedido;
         this.produto = produto;
-        this.quantidade = quantidade;
+        setQuantidade(quantidade);
     }
 
     public Pedido getPedido() {
@@ -52,7 +52,12 @@ public class ItemPedido {
     }
 
     public void setQuantidade(int quantidade) {
+        if(quantidade>0){
         this.quantidade = quantidade;
+        }
+        else{
+            throw new NumberFormatException();
+        }
     }
 
     @Override

@@ -6,10 +6,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -81,7 +81,6 @@ public class JanelaItemPedido extends JFrame {
         botoes.add(removerItem);
         add(botoes, BorderLayout.SOUTH);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
         adicionarItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -182,6 +181,7 @@ public class JanelaItemPedido extends JFrame {
             txtQuantidade.setEnabled(false);
             combo.setEnabled(false);
         }
+        tabela.clearSelection();
         janelaPedido.atualizaTabela();
     }
 

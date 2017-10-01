@@ -76,7 +76,7 @@ public class JanelaPedidos extends JFrame {
                 } else {
                     PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
                     JanelaItemPedido item = new JanelaItemPedido(produtos, modelo.getRow(tabela.getSelectedRow()), getInstance());
-                    if(dados.get(0).getItemPedido().size()<=0){
+                    if(dados.get(0).getItemPedido().size()<=0 && dados.get(0).isFechado()==false){
                     gerarItensPedido();
                     }
                     item.solicitaItemPedido();
@@ -112,6 +112,7 @@ public class JanelaPedidos extends JFrame {
     public void solicitaPedido() {
         setLocationRelativeTo(null);
         setVisible(true);
+        tabela.clearSelection();
     }
 
     public JanelaPedidos getInstance() {

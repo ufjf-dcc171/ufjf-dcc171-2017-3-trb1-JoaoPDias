@@ -64,7 +64,7 @@ public class JanelaMesas extends JFrame {
     
     private void GerarMesa(Mesa m) {
         BotaoMesa p = new BotaoMesa(m);
-        p.setIcon(new ImageIcon(getClass().getResource("icones\\table.png")));
+        p.setIcon(new ImageIcon("C:\\Users\\jpdia\\Documents\\TrabDCC171\\src\\trabalholab3\\icones\\table.png"));
         p.setVerticalTextPosition(SwingConstants.BOTTOM);
         p.setHorizontalTextPosition(SwingConstants.CENTER);
         p.setBackground(Color.WHITE);

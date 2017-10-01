@@ -59,6 +59,7 @@ public class Produto {
     }
 
     public void setValor(double valor) {
+        if(valor>0){
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
         Number n = 0;
@@ -69,7 +70,10 @@ public class Produto {
         }
         this.valor = n.doubleValue();
     }
-
+        else{
+            throw new NumberFormatException();
+        }
+    }
     @Override
     public String toString() {
         return descricao + " Valor: R$ " + valor;

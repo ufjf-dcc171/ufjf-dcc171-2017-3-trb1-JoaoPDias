@@ -20,8 +20,8 @@ import trabalholab3.modelos.Produto;
 public class JanelaInicial extends JFrame {
 
     private final JPanel area = new JPanel();
-    private final JButton produtos = new JButton("Gerenciar Produtos", new ImageIcon(getClass().getResource("icones\\produtos.png")));
-    private final JButton mesas = new JButton("Gerenciar Mesas", new ImageIcon(getClass().getResource("icones\\mesas.png")));
+    private final JButton produtos = new JButton("Gerenciar Produtos", new ImageIcon("C:\\Users\\jpdia\\Documents\\TrabDCC171\\src\\trabalholab3\\icones\\produtos.png"));
+    private final JButton mesas = new JButton("Gerenciar Mesas", new ImageIcon("C:\\Users\\jpdia\\Documents\\TrabDCC171\\src\\trabalholab3\\icones\\mesas.png"));
     private final JanelaProdutos janelaProdutos = new JanelaProdutos(getSampleData());
     private final JanelaMesas janelaMesas = new JanelaMesas(getSampleDataMesa());
 
@@ -56,7 +56,7 @@ public class JanelaInicial extends JFrame {
     List<Produto> getSampleData() {
         List<Produto> ListProdutos = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            Produto p = new Produto("Produto" + i, (45.8 * i+1) / 3);
+            Produto p = new Produto("Produto " + i, (45.8 * i+1) / 3);
             ListProdutos.add(p);
         }
         return ListProdutos;
