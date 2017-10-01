@@ -1,5 +1,6 @@
 package trabalholab3.janelas;
 
+import trabalholab3.utilitarios.BotaoMesa;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

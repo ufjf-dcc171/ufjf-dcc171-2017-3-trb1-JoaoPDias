@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalholab3.models;
+package trabalholab3.utilitarios;
 
 import java.util.List;
 import javax.swing.JComboBox;
