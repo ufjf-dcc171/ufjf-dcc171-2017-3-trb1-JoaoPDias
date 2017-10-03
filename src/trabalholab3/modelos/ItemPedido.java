@@ -62,7 +62,7 @@ public class ItemPedido {
 
     @Override
     public String toString() {
-        return "Item: "+getProduto().toString() + " X " + getQuantidade() + " = " +getValorTotal();
+        return "Item: "+getProduto().toString() + " x " + getQuantidade() + " = R$ " +getValorTotal();
     }
     
     

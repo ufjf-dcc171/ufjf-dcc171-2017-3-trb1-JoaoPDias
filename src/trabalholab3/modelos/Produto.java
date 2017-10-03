@@ -76,7 +76,7 @@ public class Produto {
     }
     @Override
     public String toString() {
-        return descricao + " Valor: R$ " + valor;
+        return "Descrição: " + descricao + "; Valor: R$ " + valor;
     }
     
     public Produto clonar(){

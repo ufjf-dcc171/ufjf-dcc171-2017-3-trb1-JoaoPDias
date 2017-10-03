@@ -76,8 +76,8 @@ public class JanelaPedidos extends JFrame {
                 } else {
                     PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
                     JanelaItemPedido item = new JanelaItemPedido(produtos, modelo.getRow(tabela.getSelectedRow()), getInstance());
-                    if(dados.get(0).getItemPedido().size()<=0 && dados.get(0).isFechado()==false){
-                    gerarItensPedido();
+                    if (dados.get(0).getItemPedido().size() <= 0 && dados.get(0).isFechado() == false) {
+                        gerarItensPedido();
                     }
                     item.solicitaItemPedido();
 
@@ -123,14 +123,14 @@ public class JanelaPedidos extends JFrame {
         PedidoTableModel modelo = (PedidoTableModel) tabela.getModel();
         modelo.fireTableDataChanged();
     }
-    
-    public void gerarItensPedido(){
-        for(int i=0;i<30;i++){
-            Random r = new Random();
-            Produto p = produtos.get(r.nextInt(10));
-            ItemPedido item = new ItemPedido(dados.get(0), p, r.nextInt(100));
-            dados.get(0).getItemPedido().add(item);
+
+    public void gerarItensPedido() {
+        for (int i = 0; i < 30; i++) {
+                Random r = new Random();
+                Produto p = produtos.get(r.nextInt(10));
+                ItemPedido item = new ItemPedido(dados.get(0), p, 5);
+                dados.get(0).getItemPedido().add(item);
         }
-        
+
     }
 }
