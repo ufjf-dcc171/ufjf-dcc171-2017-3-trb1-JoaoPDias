@@ -1,9 +1,11 @@
 package trabalholab3.modelos;
+import java.io.File;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import trabalholab3.interfaces.Gravavel;
 
-public class Mesa {
+public class Mesa implements Gravavel {
 
     private int id;
 
@@ -13,6 +15,8 @@ public class Mesa {
 
     private static int gencodigo = 1;
     private int gencodigoPedido = 1;
+    
+    private static final File arq = new File("Dados", "Mesa.txt");
 
     public int gerarCodigoPedido() {
         int cod = gencodigoPedido;
@@ -26,10 +30,18 @@ public class Mesa {
         this.pedido = new ArrayList<>();
     }
 
+    public Mesa(int id, String descricao) {
+        this.id = id;
+        this.descricao = descricao;
+    }
+    
+    
     public int getId() {
         return id;
     }
-
+    public static File getArq(){
+        return arq;
+    }
     @Override
     public String toString() {
         return descricao;
@@ -65,6 +77,20 @@ public class Mesa {
         int cod = gencodigo;
         gencodigo++;
         return cod;
+    }
+    
+      @Override
+    public String ToSerial() {
+        return this.getId()+";"+this.getDescricao();
+    }
+
+    public static Mesa ToObject(String s) {
+        String[] array = s.split(";");
+        Integer id = Integer.parseInt(array[0]);
+        String descricao = array[1];
+        Mesa mesa = new Mesa(id,descricao);
+        return mesa;
+
     }
 
 }

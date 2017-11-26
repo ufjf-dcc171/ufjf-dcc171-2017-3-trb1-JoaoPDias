@@ -8,8 +8,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import trabalholab3.interfaces.Gravavel;
 
-public class Pedido {
+public class Pedido implements Gravavel {
 
     private int id;
 
@@ -114,4 +115,19 @@ public class Pedido {
         return "\nID: " + id + "\n Descrição:" + descricao + "\n Mesa: " + mesa + "\n Hora de Abertura: " + hora_abertura.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + "\n Hora de fechamento: " + hora_fechamento.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + "\n Valor Total: R$ " + getValorTotal();
     }
 
+     @Override
+    public String ToSerial() {
+        
+        return this.getId()+";"+this.getDescricao()+";"+this.getMesa().getId()+";"+this.getHora_abertura()+";"+this.getHora_fechamento()+";"+this.isFechado();
+    }
+
+   /* public static Pedido ToObject(String s) {
+        String[] array = s.split(";");
+        Integer id = Integer.parseInt(array[0]);
+        String descricao = array[1];
+        Double valor = Double.parseDouble(array[2]);
+        
+
+    }
+*/
 }

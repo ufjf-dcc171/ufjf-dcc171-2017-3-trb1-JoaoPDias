@@ -3,15 +3,18 @@ package trabalholab3.modelos;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import trabalholab3.Dao.PedidoDAO;
+import trabalholab3.interfaces.Gravavel;
 
-public class ItemPedido {
+public class ItemPedido implements Gravavel {
 
 	private Pedido pedido;
 
 	private Produto produto;
 
 	private int quantidade;
-
+        
+        private PedidoDAO pedidodao;
 
     public double getValorTotal() {
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -30,6 +33,8 @@ public class ItemPedido {
         this.produto = produto;
         this.quantidade = quantidade;
     }
+    
+    
 
     public Pedido getPedido() {
         return pedido;
@@ -59,8 +64,21 @@ public class ItemPedido {
     public String toString() {
         return "Item: "+getProduto().toString() + " X " + getQuantidade() + " = " +getValorTotal();
     }
+
+    @Override
+    public String ToSerial() {
+        return this.getPedido().getId()+";"+this.getProduto().ToSerial()+";"+this.getQuantidade()+";"+this.getValorTotal();
+    }
     
-    
+    /*public static Gravavel ToObject(String s) {
+        String[] array = s.split(";");
+        Integer id_pedido = Integer.parseInt(array[0]);
+        Produto p = (Produto) Produto.ToObject(array[1]+";"+array[2]+";"+array[3]);
+        Integer quantidade = Integer.parseInt(array[4]);
+        ItemPedido IP = new ItemPedido(id,p,quantidade);
+    }
+
+    */
         
         
 

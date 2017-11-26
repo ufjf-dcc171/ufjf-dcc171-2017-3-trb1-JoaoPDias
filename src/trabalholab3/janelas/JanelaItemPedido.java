@@ -119,7 +119,7 @@ public class JanelaItemPedido extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (tabela.getSelectedRow() < 0) {
-                    JOptionPane.showMessageDialog(null, "Selecione um Pedido", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Selecione um Item", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     try {
                         ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
@@ -140,19 +140,27 @@ public class JanelaItemPedido extends JFrame {
         tabela.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (tabela.getSelectedRowCount() == 0) {
+                if (pedido.isFechado() == false) {
+                    if (tabela.getSelectedRowCount() == 0) {
+                        removerItem.setEnabled(false);
+                        salvarItem.setEnabled(false);
+                        adicionarItem.setEnabled(true);
+                    } else {
+                        salvarItem.setEnabled(true);
+                        removerItem.setEnabled(true);
+                        adicionarItem.setEnabled(false);
+                        ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
+                        ItemPedido p = modelo.getRow(tabela.getSelectedRow());
+                        combo.setSelectedIndex(p.getProduto().getId());
+                        int linha = tabela.getSelectedRow();
+                        txtQuantidade.setText((String) modelo.getValueAt(linha, 1));
+                    }
+                } else {
                     removerItem.setEnabled(false);
                     salvarItem.setEnabled(false);
-                    adicionarItem.setEnabled(true);
-                } else {
-                    salvarItem.setEnabled(true);
-                    removerItem.setEnabled(true);
                     adicionarItem.setEnabled(false);
-                    ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
-                    ItemPedido p = modelo.getRow(tabela.getSelectedRow());
-                    combo.setSelectedIndex(p.getProduto().getId());
-                    int linha = tabela.getSelectedRow();
-                    txtQuantidade.setText((String) modelo.getValueAt(linha, 1));
+                    txtQuantidade.setEnabled(false);
+                    combo.setEnabled(false);
                 }
             }
         });

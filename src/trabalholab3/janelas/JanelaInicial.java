@@ -23,7 +23,7 @@ public class JanelaInicial extends JFrame {
     private final JButton produtos = new JButton("Gerenciar Produtos", new ImageIcon(getClass().getResource("icones\\produtos.png")));
     private final JButton mesas = new JButton("Gerenciar Mesas", new ImageIcon(getClass().getResource("icones\\mesas.png")));
     private final JanelaProdutos janelaProdutos = new JanelaProdutos(getSampleData());
-    private final JanelaMesas janelaMesas = new JanelaMesas(getSampleDataMesa());
+    private final JanelaMesas janelaMesas = new JanelaMesas();
 
     public JanelaInicial() throws HeadlessException {
         super("Gerenciador de Mesas");

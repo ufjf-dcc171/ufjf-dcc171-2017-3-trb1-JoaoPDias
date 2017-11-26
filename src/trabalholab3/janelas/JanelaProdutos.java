@@ -141,7 +141,6 @@ public class JanelaProdutos extends JFrame {
                     return;
                 } else {
                     int linha = tabela.getSelectedRow();
-                    JOptionPane.showMessageDialog(null, tabela.getSelectedRow());
                     ProdutoTableModel modelo = (ProdutoTableModel) tabela.getModel();
                     modelo.setValueAt(txtID.getText(), linha, 0);
                     modelo.setValueAt(txtDescricao.getText(), linha, 1);
