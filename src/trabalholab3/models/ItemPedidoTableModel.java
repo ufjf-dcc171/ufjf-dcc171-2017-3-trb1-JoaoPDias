@@ -1,16 +1,21 @@
 
 package trabalholab3.models;
 
+import java.io.IOException;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import trabalholab3.Dao.ItemPedidoDAO;
 import trabalholab3.modelos.ItemPedido;
+import trabalholab3.modelos.Pedido;
 import trabalholab3.modelos.Produto;
 
 public class ItemPedidoTableModel extends AbstractTableModel {
     private List<ItemPedido> itemPedidos;
+    private ItemPedidoDAO itempedidoDao;
 
-    public ItemPedidoTableModel(List<ItemPedido> itens) {
-        this.itemPedidos = itens;
+    public ItemPedidoTableModel(Pedido pedido) throws IOException {
+        this.itempedidoDao = new ItemPedidoDAO(pedido);
+        this.itemPedidos = itempedidoDao.getItemPedidos();
     }
 
     @Override
@@ -64,13 +69,20 @@ public class ItemPedidoTableModel extends AbstractTableModel {
         }
     }
     
-    public void addRow(ItemPedido p){
-        itemPedidos.add(p);
+    public void addRow(ItemPedido p) throws IOException{
+        itempedidoDao.inserir(p);
         this.fireTableDataChanged();
     }
-    public void removeRow(int p){
-        itemPedidos.remove(p);
+    public void removeRow(ItemPedido p) throws IOException{
+        itempedidoDao.excluir(p);
         this.fireTableDataChanged();
+    }
+    
+    public boolean alterarItemPedido(ItemPedido itempedido) throws IOException{
+        boolean fechado = this.itempedidoDao.alterarItemPedido(itempedido.getId());
+        this.itemPedidos = this.itempedidoDao.getItemPedidos();
+        return fechado;
+        
     }
     
        public ItemPedido getRow(int p){

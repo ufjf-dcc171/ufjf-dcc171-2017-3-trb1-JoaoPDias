@@ -1,5 +1,8 @@
 package trabalholab3.modelos;
+import Generator.GeneratorMesa;
+import Generator.GeneratorPedido;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,19 +15,22 @@ public class Mesa implements Gravavel {
     private String descricao;
 
     private List<Pedido> pedido;
-
-    private static int gencodigo = 1;
     private int gencodigoPedido = 1;
     
-    private static final File arq = new File("Dados", "Mesa.txt");
+    private static final File arq = new File("Dados\\Mesas", "Mesa.txt");
+    
+    private GeneratorPedido gerador;
 
-    public int gerarCodigoPedido() {
-        int cod = gencodigoPedido;
-        gencodigoPedido++;
+    public int gerarCodigoPedido() throws IOException {
+        gerador= new GeneratorPedido(this);
+        int cod = gerador.getIDPedido();
+        gerador.addIDPedido(cod);
         return cod;
     }
+    
+    
 
-    public Mesa() {
+    public Mesa() throws IOException {
         this.id = gerarCodigo();
         this.descricao = "Mesa " + id;
         this.pedido = new ArrayList<>();
@@ -33,6 +39,7 @@ public class Mesa implements Gravavel {
     public Mesa(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
+        this.pedido = new ArrayList<>();
     }
     
     
@@ -63,19 +70,19 @@ public class Mesa implements Gravavel {
         return pedido;
     }
 
-    public void gerarPedido() {
+    public void gerarPedido() throws IOException {
         Pedido p = new Pedido(this,LocalTime.now());
         this.pedido.add(p);
     }
     
-    public Pedido criarPedido() {
+    public Pedido criarPedido() throws IOException {
         Pedido p = new Pedido(this,LocalTime.now());
         return p;
     }
 
-    public static int gerarCodigo() {
-        int cod = gencodigo;
-        gencodigo++;
+    public static int gerarCodigo() throws IOException {
+        int cod = GeneratorMesa.getIDMesa();
+        GeneratorMesa.addIDMesa(cod);
         return cod;
     }
     

@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class JanelaMesas extends JFrame {
             Mensagem.erroAcesso(this, Mesa.getArq().getAbsolutePath());
         }
         this.mesas = mesaDAO.getMesas();
+        for (Mesa m : mesas) {
+            GerarMesa(m);
+        }
         setMinimumSize(new Dimension(500, 500));
         adicionarMesa.setBackground(new Color(034, 139, 034));
         adicionarMesa.setForeground(Color.WHITE);
@@ -53,18 +57,16 @@ public class JanelaMesas extends JFrame {
         adicionarMesa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Mesa m = new Mesa();
                 try {
+                    Mesa m = new Mesa();
                     mesaDAO.inserir(m);
-                    getInstance().AtualizaMesas();
+                    GerarMesa(m);
                 } catch (IOException ex) {
                     Mensagem.erroAcesso(getInstance(), "Erro ao adicionar a mesa.");
                 }
-                GerarMesa(m);
 
             }
         });
-        gerarPedidos();
     }
 
     public JanelaProdutos getJanelaProdutos() {
@@ -87,9 +89,15 @@ public class JanelaMesas extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (p.getJanelaPedidos() == null) {
-                    JanelaPedidos pedido = new JanelaPedidos(produtos, p.getMesa(), p.getMesa().getPedido());
-                    p.setJanelaPedidos(pedido);
-                    p.getJanelaPedidos().solicitaPedido();
+                    JanelaPedidos pedido;
+                    try {
+                        pedido = new JanelaPedidos(produtos, p.getMesa());
+                        p.setJanelaPedidos(pedido);
+                        p.getJanelaPedidos().solicitaPedido();
+                    } catch (Exception ex) {
+                        Mensagem.erroAcesso(getInstance(), "Erro ao adicionar a Pedido.");
+                    }
+
                 } else {
                     p.getJanelaPedidos().solicitaPedido();
                 }
@@ -111,7 +119,7 @@ public class JanelaMesas extends JFrame {
         setVisible(true);
 
     }
-
+/*
     public void gerarPedidos() {
         for (int i = 0; i < 1; i++) {
             mesas.forEach((m) -> {
@@ -121,12 +129,9 @@ public class JanelaMesas extends JFrame {
         }
 
     }
-
+*/
     private JanelaMesas getInstance() {
         return this;
     }
 
-    private void AtualizaMesas() {
-        this.mesas = mesaDAO.getMesas();
-    }
 }

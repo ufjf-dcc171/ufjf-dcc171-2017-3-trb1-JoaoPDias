@@ -1,13 +1,17 @@
 package trabalholab3.modelos;
 
+import Generator.GeneratorItemPedido;
+import java.io.File;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
 import java.util.List;
+import trabalholab3.Dao.ItemPedidoDAO;
+import trabalholab3.Dao.MesaDAO;
 import trabalholab3.interfaces.Gravavel;
 
 public class Pedido implements Gravavel {
@@ -26,12 +30,47 @@ public class Pedido implements Gravavel {
 
     private boolean fechado;
 
-    public Pedido(Mesa mesa, LocalTime hora_abertura) {
+    private static File arq;
+
+    private MesaDAO mesaDao;
+    private GeneratorItemPedido gerador;
+    ItemPedidoDAO itempedidodao;
+
+    public Pedido(Mesa mesa, LocalTime hora_abertura) throws IOException {
         this.mesa = mesa;
         this.hora_abertura = hora_abertura;
         this.id = this.mesa.gerarCodigoPedido();
         this.descricao = "Pedido " + id;
-        this.itemPedido = new ArrayList<>();
+        arq  = gerarArquivo(mesa);
+        this.itempedidodao = new ItemPedidoDAO(this);
+        this.itemPedido = itempedidodao.getItemPedidos();
+    }
+
+    public Pedido(int id, String descricao, Integer idmesa, LocalTime hora_abertura, boolean fechado) throws IOException {
+        this.id = id;
+        this.descricao = descricao;
+        mesaDao = new MesaDAO();
+        Mesa mesa = mesaDao.listar(idmesa);
+        this.mesa = mesa;
+        this.hora_abertura = hora_abertura;
+        this.fechado = fechado;
+        arq = gerarArquivo(mesa);
+        this.itempedidodao = new ItemPedidoDAO(this);
+        this.itemPedido = itempedidodao.getItemPedidos();
+    }
+
+    public Pedido(int id, String descricao, Integer idmesa, LocalTime hora_abertura, LocalTime hora_fechamento, boolean fechado) throws IOException {
+        this.id = id;
+        this.descricao = descricao;
+        mesaDao = new MesaDAO();
+        Mesa mesa = mesaDao.listar(idmesa);
+        this.mesa = mesa;
+        this.hora_abertura = hora_abertura;
+        this.hora_fechamento = hora_fechamento;
+        this.fechado = fechado;
+        arq = gerarArquivo(mesa);
+        this.itempedidodao = new ItemPedidoDAO(this);
+        this.itemPedido = itempedidodao.getItemPedidos();
     }
 
     public int getId() {
@@ -40,6 +79,10 @@ public class Pedido implements Gravavel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public File getArq() {
+        return arq;
     }
 
     public String getDescricao() {
@@ -102,32 +145,42 @@ public class Pedido implements Gravavel {
         return n.doubleValue();
     }
 
-    public void adicionarItem(ItemPedido i) {
-        itemPedido.add(i);
-    }
-
-    public void removerItem(ItemPedido i) {
-        itemPedido.remove(i);
-    }
-
     @Override
     public String toString() {
         return "\nID: " + id + "\n Descrição:" + descricao + "\n Mesa: " + mesa + "\n Hora de Abertura: " + hora_abertura.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + "\n Hora de fechamento: " + hora_fechamento.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + "\n Valor Total: R$ " + getValorTotal();
     }
 
-     @Override
+    @Override
     public String ToSerial() {
-        
-        return this.getId()+";"+this.getDescricao()+";"+this.getMesa().getId()+";"+this.getHora_abertura()+";"+this.getHora_fechamento()+";"+this.isFechado();
+        String fechamento = this.getHora_fechamento() != null ? this.getHora_fechamento().toString() : "NULO";
+        return this.getId() + ";" + this.getMesa().getId() + ";" + this.getDescricao() + ";" + this.getHora_abertura() + ";" + fechamento;
     }
 
-   /* public static Pedido ToObject(String s) {
+    public static Pedido ToObject(String s) throws IOException {
         String[] array = s.split(";");
+        Pedido p;
         Integer id = Integer.parseInt(array[0]);
-        String descricao = array[1];
-        Double valor = Double.parseDouble(array[2]);
-        
+        Integer id_mesa = Integer.parseInt(array[1]);
+        String descricao = array[2];
+        LocalTime horaAbertura = LocalTime.parse(array[3]);
+        if ("NULO".equals(array[4])) {
+            p = new Pedido(id, descricao, id_mesa, horaAbertura, false);
+            return p;
+        }
+        LocalTime horaFechamento = LocalTime.parse(array[4]);
+        p = new Pedido(id, descricao, id_mesa, horaAbertura, horaFechamento, true);
+        return p;
 
     }
-*/
+    
+    public static File gerarArquivo(Mesa mesa){
+        return new File("Dados\\Pedidos", "Pedido " + mesa.getDescricao()+".txt");
+    }
+    
+     public int gerarCodigoItemPedido() throws IOException {
+        gerador= new GeneratorItemPedido(this);
+        int cod = gerador.getIDItemPedido();
+        gerador.addIDItemPedido(cod);
+        return cod;
+    }
 }
