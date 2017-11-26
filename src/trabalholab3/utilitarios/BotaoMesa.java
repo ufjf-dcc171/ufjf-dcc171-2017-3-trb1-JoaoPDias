@@ -1,15 +1,9 @@
 
-package trabalholab3.janelas;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+package trabalholab3.utilitarios;
 import javax.swing.JButton;
+import trabalholab3.janelas.JanelaPedidos;
 import trabalholab3.modelos.Mesa;
 
-/**
- *
- * @author jpdia
- */
 public class BotaoMesa extends JButton {
     private Mesa mesa;
     private JanelaPedidos janelaPedidos;

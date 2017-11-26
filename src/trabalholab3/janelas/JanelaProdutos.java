@@ -175,4 +175,80 @@ public class JanelaProdutos extends JFrame {
     }
     
 
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Campo Vazio", "Advertência", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        remover.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tabela.getSelectedRowCount() == 0) {
+                    return;
+                } else {
+                    ProdutoTableModel modelo = (ProdutoTableModel) tabela.getModel();
+                    modelo.removeRow(tabela.getSelectedRow());
+                    txtValor.setText("");
+                    txtDescricao.setText("");
+                    txtID.setText(Integer.toString(Produto.gerarCodigo()));
+                    txtID.setEnabled(false);
+                    txtDescricao.requestFocus();
+                }
+            }
+        });
+
+        salvar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tabela.getSelectedRowCount() == 0) {
+                    return;
+                } else if (isValid(txtID.getText()) && isValid(txtDescricao.getText()) && isValid(txtValor.getText())) {
+                    try {
+                        int linha = tabela.getSelectedRow();
+                        ProdutoTableModel modelo = (ProdutoTableModel) tabela.getModel();
+                        modelo.setValueAt(txtID.getText(), linha, 0);
+                        modelo.setValueAt(txtDescricao.getText(), linha, 1);
+                        modelo.setValueAt(txtValor.getText(), linha, 2);
+                        txtValor.setText("");
+                        txtDescricao.setText("");
+                        txtID.setText(Integer.toString(Produto.gerarCodigo()));
+                        txtID.setEnabled(false);
+                        txtDescricao.requestFocus();
+                        tabela.clearSelection();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Formato Inválido para o Valor do Produto", "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Campo Vazio", "Advertência", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public void solicitaProduto() {
+        setLocationRelativeTo(null);
+        setVisible(true);
+        txtValor.setText("");
+        txtDescricao.setText("");
+        txtID.setText(Integer.toString(Produto.gerarCodigo()));
+        txtID.setEnabled(false);
+        txtDescricao.requestFocus();
+        adicionar.setEnabled(true);
+        remover.setEnabled(false);
+        salvar.setEnabled(false);
+        tabela.clearSelection();
+    }
+
+    private boolean isValid(String text) {
+        return !text.isEmpty();
+    }
+
+    public List<Produto> getDados() {
+        return dados;
+    }
+
 }
