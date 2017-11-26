@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import trabalholab3.modelos.Mesa;
-import trabalholab3.modelos.Pedido;
 
 public class MesaDAO {
 
@@ -41,10 +40,18 @@ public class MesaDAO {
             Mesa m = Mesa.ToObject(s);
             lista.add(m);
         }
+
+        br.close();
+        fr.close();
         return lista;
     }
 
     public Mesa listar(Integer id) {
+        for (Mesa m : mesas) {
+            if (m.getId() == id) {
+                return m;
+            }
+        }
         return null;
     }
 
@@ -56,7 +63,11 @@ public class MesaDAO {
         BufferedWriter bw = new BufferedWriter(fw);
         for (Mesa m : lista) {
             bw.write(m.ToSerial());
+            bw.newLine();
+
         }
+        bw.close();
+        fw.close();
 
     }
 
