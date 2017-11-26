@@ -22,7 +22,7 @@ public class JanelaInicial extends JFrame {
     private final JButton produtos = new JButton("Gerenciar Produtos", new ImageIcon("C:\\Users\\jpdia\\Documents\\TrabDCC171\\src\\trabalholab3\\icones\\produtos.png"));
     private final JButton mesas = new JButton("Gerenciar Mesas", new ImageIcon("C:\\Users\\jpdia\\Documents\\TrabDCC171\\src\\trabalholab3\\icones\\mesas.png"));
     private final JanelaProdutos janelaProdutos = new JanelaProdutos(getSampleData());
-    private final JanelaMesas janelaMesas = new JanelaMesas(getSampleDataMesa());
+    private final JanelaMesas janelaMesas = new JanelaMesas();
 
     public JanelaInicial() throws HeadlessException {
         super("Gerenciador de Mesas");
@@ -60,15 +60,6 @@ public class JanelaInicial extends JFrame {
         }
         return ListProdutos;
 
-    }
-
-    List<Mesa> getSampleDataMesa() {
-        List<Mesa> ListMesa = new ArrayList<>();
-        for (int i = 0; i <= 60; i++) {
-            Mesa m = new Mesa();
-            ListMesa.add(m);
-        }
-        return ListMesa;
     }
 
 }

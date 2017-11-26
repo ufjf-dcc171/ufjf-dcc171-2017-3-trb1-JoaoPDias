@@ -109,7 +109,7 @@ public class JanelaProdutos extends JFrame {
                     txtDescricao.requestFocus();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Formato Inválido para o Valor do Produto", "ERRO", JOptionPane.ERROR_MESSAGE);
-
+                    
                 }
 
             } else {
@@ -139,26 +139,18 @@ public class JanelaProdutos extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (tabela.getSelectedRowCount() == 0) {
                     return;
-                } else if (isValid(txtID.getText()) && isValid(txtDescricao.getText()) && isValid(txtValor.getText())) {
-                    try {
-                        int linha = tabela.getSelectedRow();
-                        ProdutoTableModel modelo = (ProdutoTableModel) tabela.getModel();
-                        modelo.setValueAt(txtID.getText(), linha, 0);
-                        modelo.setValueAt(txtDescricao.getText(), linha, 1);
-                        modelo.setValueAt(txtValor.getText(), linha, 2);
-                        txtValor.setText("");
-                        txtDescricao.setText("");
-                        txtID.setText(Integer.toString(Produto.gerarCodigo()));
-                        txtID.setEnabled(false);
-                        txtDescricao.requestFocus();
-                        tabela.clearSelection();
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Formato Inválido para o Valor do Produto", "ERRO", JOptionPane.ERROR_MESSAGE);
-
-                    }
-
                 } else {
-                    JOptionPane.showMessageDialog(null, "Campo Vazio", "Advertência", JOptionPane.INFORMATION_MESSAGE);
+                    int linha = tabela.getSelectedRow();
+                    ProdutoTableModel modelo = (ProdutoTableModel) tabela.getModel();
+                    modelo.setValueAt(txtID.getText(), linha, 0);
+                    modelo.setValueAt(txtDescricao.getText(), linha, 1);
+                    modelo.setValueAt(txtValor.getText(), linha, 2);
+                    txtValor.setText("");
+                    txtDescricao.setText("");
+                    txtID.setText(Integer.toString(Produto.gerarCodigo()));
+                    txtID.setEnabled(false);
+                    txtDescricao.requestFocus();
+                    tabela.clearSelection();
                 }
             }
         });
@@ -172,10 +164,6 @@ public class JanelaProdutos extends JFrame {
         txtID.setText(Integer.toString(Produto.gerarCodigo()));
         txtID.setEnabled(false);
         txtDescricao.requestFocus();
-        adicionar.setEnabled(true);
-        remover.setEnabled(false);
-        salvar.setEnabled(false);
-        tabela.clearSelection();
     }
 
     private boolean isValid(String text) {
@@ -185,5 +173,5 @@ public class JanelaProdutos extends JFrame {
     public List<Produto> getDados() {
         return dados;
     }
-
+    
 }

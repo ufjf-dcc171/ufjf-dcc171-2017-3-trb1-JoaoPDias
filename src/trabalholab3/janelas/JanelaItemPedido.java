@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,10 +19,12 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import trabalholab3.Dao.ItemPedidoDAO;
 import trabalholab3.modelos.ItemPedido;
 import trabalholab3.modelos.Pedido;
 import trabalholab3.modelos.Produto;
 import trabalholab3.models.ItemPedidoTableModel;
+import trabalholab3.util.Mensagem;
 import trabalholab3.utilitarios.ProdutoComboBox;
 
 public class JanelaItemPedido extends JFrame {
@@ -37,13 +40,15 @@ public class JanelaItemPedido extends JFrame {
     private JButton removerItem = new JButton("Remover Item");
     private JTable tabela;
     private JanelaPedidos janelaPedido;
+    private ItemPedidoDAO itemPedidoDao;
 
-    public JanelaItemPedido(List<Produto> dadosProdutos, Pedido p, JanelaPedidos j) {
+    public JanelaItemPedido(List<Produto> dadosProdutos, Pedido p, JanelaPedidos j) throws IOException {
         super("Itens do Pedido");
         setMinimumSize(new Dimension(500, 500));
         this.dadosProdutos = dadosProdutos;
         this.pedido = p;
         this.janelaPedido = j;
+        this.itemPedidoDao = new ItemPedidoDAO(pedido);
         combo = new ProdutoComboBox(dadosProdutos);
         JPanel formulario = new JPanel();
         JPanel campoItem = new JPanel();
@@ -72,7 +77,7 @@ public class JanelaItemPedido extends JFrame {
         removerItem.setBackground(Color.red);
         removerItem.setForeground(Color.WHITE);
         add(formulario, BorderLayout.NORTH);
-        tabela = new JTable(new ItemPedidoTableModel(pedido.getItemPedido()));
+        tabela = new JTable(new ItemPedidoTableModel(pedido));
         add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel botoes = new JPanel();
         botoes.setLayout(new GridLayout(1, 1));
@@ -93,6 +98,8 @@ public class JanelaItemPedido extends JFrame {
                     janelaPedido.atualizaTabela();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Quantidade Inválida", "Alerta", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ex) {
+                    Mensagem.erroAcesso(getInstance(), "Erro ao adicionar Item ao Pedido.");
                 }
             }
         }
@@ -104,7 +111,11 @@ public class JanelaItemPedido extends JFrame {
                     JOptionPane.showMessageDialog(null, "Selecione um Pedido", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
-                    modelo.removeRow(tabela.getSelectedRow());
+                    try {
+                        modelo.removeRow(modelo.getRow(tabela.getSelectedRow()));
+                    } catch (IOException ex) {
+                        Mensagem.erroAcesso(getInstance(), "Erro ao adicionar o item pedido.");
+                    }
                     combo.setSelectedIndex(0);
                     txtQuantidade.setText("");
                     janelaPedido.atualizaTabela();
@@ -120,16 +131,21 @@ public class JanelaItemPedido extends JFrame {
                 } else {
                     try {
                         ItemPedidoTableModel modelo = (ItemPedidoTableModel) tabela.getModel();
+                        ItemPedido ip = modelo.getRow(tabela.getSelectedRow());
                         Produto p = (Produto) combo.getSelectedItem();
-                        int linha = tabela.getSelectedRow();
-                        modelo.setValueAt(p, linha, 0);
-                        modelo.setValueAt(txtQuantidade.getText(), linha, 1);
-                        modelo.fireTableDataChanged();
-                        combo.setSelectedIndex(0);
-                        txtQuantidade.setText("");
-                        janelaPedido.atualizaTabela();
+                        Integer quantidade = Integer.parseInt(txtQuantidade.getText());
+                        ip.setProduto(p);
+                        ip.setQuantidade(quantidade);
+                        if (modelo.alterarItemPedido(ip)==true) {
+                            modelo.fireTableDataChanged();
+                            combo.setSelectedIndex(0);
+                            txtQuantidade.setText("");
+                            janelaPedido.atualizaTabela();
+                        }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Quantidade Inválida", "Alerta", JOptionPane.ERROR_MESSAGE);
+                    } catch (IOException ex) {
+                        Mensagem.erroAcesso(getInstance(), "Erro ao alterar Item do Pedido.");
                     }
                 }
             }
@@ -181,6 +197,10 @@ public class JanelaItemPedido extends JFrame {
         }
         tabela.clearSelection();
         janelaPedido.atualizaTabela();
+    }
+
+    public JanelaItemPedido getInstance() {
+        return this;
     }
 
 }

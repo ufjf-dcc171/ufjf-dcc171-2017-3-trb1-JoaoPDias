@@ -1,17 +1,22 @@
 package trabalholab3.models;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import trabalholab3.Dao.PedidoDAO;
+import trabalholab3.modelos.Mesa;
 import trabalholab3.modelos.Pedido;
 
 public class PedidoTableModel extends AbstractTableModel {
 
     private List<Pedido> pedidos;
+    private PedidoDAO pedidoDao;
 
-    public PedidoTableModel(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
+    public PedidoTableModel(Mesa mesa) throws IOException {
+        this.pedidoDao = new PedidoDAO(mesa);
+        this.pedidos = pedidoDao.getPedidos();
     }
 
     @Override
@@ -73,19 +78,26 @@ public class PedidoTableModel extends AbstractTableModel {
         }
     }
 
-    public void addRow(Pedido p) {
-        pedidos.add(p);
+    public void addRow(Pedido p) throws IOException {
+        pedidoDao.inserir(p);
         this.fireTableDataChanged();
     }
 
-    public void removeRow(int p) {
-        pedidos.remove(p);
+    public void removeRow(Pedido p) throws IOException {
+        pedidoDao.excluir(p);
         this.fireTableDataChanged();
     }
 
     public Pedido getRow(int p) {
         return pedidos.get(p);
 
+    }
+    
+    public boolean fecharPedido(Pedido pedido) throws IOException{
+        boolean fechado = this.pedidoDao.fecharPedido(pedido.getId());
+        this.pedidos = pedidoDao.getPedidos();
+        return fechado;
+        
     }
 
     public boolean haAbertos() {
@@ -96,4 +108,10 @@ public class PedidoTableModel extends AbstractTableModel {
         }
         return false;
     }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+    
+    
 }
